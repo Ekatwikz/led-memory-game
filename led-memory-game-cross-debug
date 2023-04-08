@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+
+GDB=../bin/aarch64-buildroot-linux-gnu-gdb
+
+GAMENAME=led-memory-game
+GAMEVER=0.0.1
+BUILDFILE=../../build/$GAMENAME-$GAMEVER/$GAMENAME
+
+STAGINGDIR=../../staging
+
+DEBUGSETUP=../etc/led-memory-game-debugsetup.gdbinit
+
+REMOTE=localhost
+REMOTEPORT=7654
+
+STARTDIR=$(pwd)
+
+main() {
+	simple_connect_test
+
+	#shellcheck disable=2164
+	cd "$(dirname "$0")"
+
+	[ -e $GDB ] || err_msg "Coldn't find $GDB"
+	[ -e $BUILDFILE ] || err_msg "Couldn't find $BUILDFILE"
+	[ -e $DEBUGSETUP ] || err_msg "Couldn't find $DEBUGSETUP"
+	[ -d $STAGINGDIR ] || err_msg "Couldn't find $STAGINGDIR"
+
+	$GDB $BUILDFILE -q -ex "set sy $STAGINGDIR" -ex "tar rem $REMOTE:$REMOTEPORT" -x "$DEBUGSETUP" "$@"
+	finishup 0
+}
+
+simple_connect_test() {
+	command -v nc 1>/dev/null || return # oof
+	timeout 3 nc -z $REMOTE $REMOTEPORT || err_msg "Couldn't find remote. Run the debug server on the target? idk"
+}
+
+err_msg() {
+	printf "%s\n" "$1" >&2 && finishup 1
+}
+
+finishup() {
+	#shellcheck disable=2164
+	cd "$STARTDIR" && exit "$1"
+}
+
+main "$@"
+

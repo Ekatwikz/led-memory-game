@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+MIRROR=http://spages.mini.pw.edu.pl/~katwikirizee/LinES
+INSTALLPATH=/usr/bin
+GAMENAME=led-memory-game
+
+wget $MIRROR/$GAMENAME -O $INSTALLPATH/$GAMENAME
+
