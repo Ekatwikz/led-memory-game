@@ -1,0 +1,4 @@
+[submodule "katwikOpsys"]
+	path = katwikOpsys
+	url = https://github.com/Ekatwikz/katwikOpsys
+	branch = dev

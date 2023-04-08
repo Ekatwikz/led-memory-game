@@ -1,0 +1,11 @@
+# archives +etc
+*.gz
+
+# clang stuff
+.cache
+compile_commands.json
+
+# vim stuff
+*.swp
+*~
+
