@@ -7,3 +7,5 @@ Setup:
 - select the game under Target Packages -> Games -> led-memory-game
 - `make`
 
+NB: remember to clone with [`--recurse-submodules`](https://git-scm.com/book/en/v2/Git-Tools-Submodules)!
+
