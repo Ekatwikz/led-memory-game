@@ -1,0 +1,29 @@
+config BR2_PACKAGE_LED_MEMORY_GAME
+	bool "led-memory-game"
+	select BR2_PACKAGE_LIBGPIOD
+	help
+	  A simple game using buttons and LEDs
+	  Requires the libgpiod abstractions
+
+	  https://github.com/ekatwikz/LinuxForEmbeddedSystems
+	  https://github.com/ekatwikz/led-memory-game
+
+if BR2_PACKAGE_LED_MEMORY_GAME
+
+config BR2_PACKAGE_LED_MEMORY_GAME_DEBUG
+	bool "led-memory-game debug"
+	depends on BR2_ENABLE_DEBUG
+	select BR2_PACKAGE_GDB
+	select BR2_PACKAGE_GDB_SERVER
+	select BR2_PACKAGE_HOST_GDB
+	select BR2_PACKAGE_HOST_GDB_TUI
+	help
+	  Adds a couple gdb scripts for ez debugging of led-memory-game
+	  Requires gdbserver on the target, and gdb configured with --enable-tui on host
+	  Requires BR2_ENABLE_DEBUG so that binaries in staging will have debug symbols
+	  You may also wanna select BR2_DEBUG_3=y, it's noice imo
+
+comment "(optional) tools for debugging led-memory-game require BR2_ENABLE_DEBUG"
+	depends on !BR2_ENABLE_DEBUG
+
+endif
