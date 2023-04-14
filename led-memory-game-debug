@@ -1,8 +1,36 @@
 #!/usr/bin/env sh
-SERVERCOMM=localhost:7654
+
+SERVERCOMM=localhost
+SERVERPORT=7654
 INSTALLPATH=/usr/bin
 GAMENAME=led-memory-game
 
-printf "(Rember to start the host cross-debug script too)\n\n"
-gdbserver $SERVERCOMM $INSTALLPATH/$GAMENAME "$@"
+USAGE="Usage: $0 [-p PORT] [GDBOPTS]"
 
+main () {
+    printf "(Rember to start the host cross-debug script too)\n\n"
+    gdbserver $SERVERCOMM:$SERVERPORT $INSTALLPATH/$GAMENAME "$@"
+}
+
+check_opts() {
+	while getopts ":p:h" opt; do
+		case "${opt}" in
+			p)
+				SERVERPORT=${OPTARG} ;;
+			h)
+				printf "%s\n" "$USAGE" && exit ;;
+			*)
+				err_msg "$USAGE" ;;
+		esac
+	done
+	shift $((OPTIND-1))
+
+	main "$@"
+}
+
+err_msg() {
+	printf "%s\n" "$1" >&2
+	exit 1
+}
+
+check_opts "$@"
