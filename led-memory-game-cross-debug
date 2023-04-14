@@ -17,9 +17,9 @@ REMOTEPORT=7654
 STARTDIR=$(pwd)
 
 main() {
-	simple_connect_test
 	REMOTE="$1"
 	shift || err_msg "$USAGE"
+	simple_connect_test
 
 	#shellcheck disable=2164
 	cd "$(dirname "$0")"
